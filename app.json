@@ -1,0 +1,51 @@
+{
+  "expo": {
+    "name": "LocalBeats",
+    "slug": "localbeats",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#121212"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSAppleMusicUsageDescription": "LocalBeats needs access to your music library.",
+        "NSMicrophoneUsageDescription": "Required for media playback on iOS."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#121212"
+      },
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "android.permission.READ_MEDIA_AUDIO",
+        "android.permission.READ_EXTERNAL_STORAGE"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-av",
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow LocalBeats to access your music files.",
+          "savePhotosPermission": "Allow LocalBeats to save files.",
+          "isAccessMediaLocationEnabled": true
+        }
+      ]
+    ],
+    "scheme": "localbeats"
+  }
+}
