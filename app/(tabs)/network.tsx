@@ -51,37 +51,31 @@ export default function NetworkScreen() {
 
 		if (Platform.OS === "web") {
 			try {
+				const infoRes = await fetch(
+					`${API_BASE}/api/info?url=${encodeURIComponent(url)}`,
+				);
+				const meta = infoRes.ok
+					? await infoRes.json()
+					: { title: `Track ${id}`, artist: "YouTube", duration: 0 };
+
 				const res = await fetch(apiUrl);
 				if (!res.ok) throw new Error(`Server error ${res.status}`);
 
-				const title =
-					decodeURIComponent(res.headers.get("x-track-title") ?? "") ||
-					`Track ${id}`;
-				const artist =
-					decodeURIComponent(res.headers.get("x-track-artist") ?? "") ||
-					"YouTube";
-				const apiDuration = Number(res.headers.get("x-track-duration") ?? 0);
+				const title = meta.title || `Track ${id}`;
+				const artist = meta.artist || "YouTube";
+				const apiDuration = meta.duration || 0;
 
 				const blob = await res.blob();
 				if (blob.size === 0) throw new Error("empty response");
 
 				const blobUrl = URL.createObjectURL(blob);
 
-				const duration = await new Promise<number>((resolve) => {
-					const audio = new Audio(blobUrl);
-					audio.addEventListener("loadedmetadata", () =>
-						resolve(audio.duration || apiDuration),
-					);
-					audio.addEventListener("error", () => resolve(apiDuration));
-					setTimeout(() => resolve(apiDuration), 5000);
-				});
-
 				const newTrack: Track = {
 					id,
 					title,
 					artist,
 					album: "Downloads",
-					duration,
+					duration: apiDuration,
 					uri: blobUrl,
 				};
 
